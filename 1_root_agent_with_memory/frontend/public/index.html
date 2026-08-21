@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADK Agent Chatbot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="url(#logo-grad)" />
+            <path d="M2 17L12 22L22 17" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M2 12L12 17L22 12" stroke="url(#logo-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="logo-grad" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse">
+                <stop stop-color="#8A2387"/>
+                <stop offset="0.5" stop-color="#E94057"/>
+                <stop offset="1" stop-color="#F27121"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <h2>ADK Root Agent</h2>
+      </div>
+
+      <div class="sidebar-actions">
+        <button id="new-chat-btn" class="btn btn-primary">
+          <span class="icon">+</span> New Session
+        </button>
+      </div>
+
+      <div class="session-panel">
+        <h3>Session Settings</h3>
+        <div class="session-info">
+          <label>Current Session ID:</label>
+          <div class="session-display-wrapper">
+            <span id="session-id-display">None (Will auto-generate)</span>
+            <button id="copy-session-btn" title="Copy Session ID" class="btn-icon" disabled>
+              <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="session-actions">
+          <div class="form-group">
+            <label for="existing-session-input">Load Session ID:</label>
+            <div class="input-inline">
+              <input type="text" id="existing-session-input" placeholder="Paste session UUID here...">
+              <button id="load-session-btn" class="btn btn-secondary">Load</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <div class="status-indicator">
+          <span class="status-dot online"></span>
+          <span>FastAPI Service (Port 8000)</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Chat Workspace -->
+    <main class="chat-workspace">
+      <header class="chat-header">
+        <div class="agent-profile">
+          <div class="agent-avatar">RA</div>
+          <div class="agent-details">
+            <h3>Root Agent</h3>
+            <span class="agent-status">Online • Ready to assist</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="chat-messages-container" id="chat-messages">
+        <div class="system-message">
+          <p>Welcome to the ADK Root Agent Chat interface. Start typing below to begin a conversation.</p>
+        </div>
+      </div>
+
+      <div class="chat-input-wrapper">
+        <form id="chat-form">
+          <div class="input-box">
+            <textarea id="chat-input" placeholder="Type a message or request flights..." rows="1" required></textarea>
+            <button type="submit" id="send-btn" class="btn-send">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+              </svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+</body>
+</html>
