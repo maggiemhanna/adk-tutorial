@@ -7,7 +7,7 @@ if str(project_root) not in sys.path:
     sys.path.append(str(project_root))
 
 from fastapi.testclient import TestClient
-from agents.sequantial_agent.main import api
+from agents.sequential_agent.main import api
 from utils.logging import setup_logging
 
 # Setup logger

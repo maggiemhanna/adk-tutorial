@@ -11,7 +11,7 @@ from google.adk.runners import Runner
 from google.adk.sessions import InMemorySessionService
 from google.genai.types import Content, Part
 
-from agents.sequantial_agent.agent import sequantial_agent
+from agents.sequential_agent.agent import sequential_agent
 
 from utils.logging import setup_logging
 from dotenv import load_dotenv
@@ -22,7 +22,7 @@ load_dotenv(Path(__file__).parent / ".env")
 
 logger = setup_logging(name=__name__)
 
-APP_NAME = "sequantial_agent"
+APP_NAME = "sequential_agent"
 
 
 # --- FastAPI Application ---
@@ -45,17 +45,17 @@ async def setup_session_and_runner(user_id: str):
     service = InMemorySessionService()
 
     session = await service.create_session(
-        app_name=sequantial_agent.name, 
+        app_name=sequential_agent.name, 
         user_id=user_id
     )
 
     runner = Runner(
-        agent=sequantial_agent,
-        app_name=sequantial_agent.name,
+        agent=sequential_agent,
+        app_name=sequential_agent.name,
         session_service=service
     )
 
-    logger.info(f"Setup session for agent: '{sequantial_agent.name}', user: '{user_id}', session: '{session.id}'...")
+    logger.info(f"Setup session for agent: '{sequential_agent.name}', user: '{user_id}', session: '{session.id}'...")
     
     return service, session, runner
 
@@ -66,7 +66,7 @@ async def execute_agent_run(query: str):
     _, session, runner = await setup_session_and_runner(
         user_id=user_id
     )
-    logger.info(f"Setup session for agent: '{sequantial_agent.name}', user: '{user_id}', session: '{session.id}'...")
+    logger.info(f"Setup session for agent: '{sequential_agent.name}', user: '{user_id}', session: '{session.id}'...")
 
     responses = []
     try:
