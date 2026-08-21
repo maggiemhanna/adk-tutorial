@@ -40,11 +40,11 @@ By combining `google.adk.agents.parallel_agent.ParallelAgent` with `google.adk.a
 │   ├── synthesis_agent/
 │   │   ├── agent.py            # Synthesis agent definition
 │   │   └── prompt.py           # Synthesis prompt consuming {hotel_results}, {restaurant_results}, {transportation_results}
-│   └── sequantial_agent/
+│   └── sequential_agent/
 │       ├── agent.py            # SequentialAgent chaining [parallel_agent, synthesis_agent]
 │       └── main.py             # FastAPI service running the combined workflow
 ├── tests/
-│   └── sequantial_agent/
+│   └── sequential_agent/
 │       └── test.py             # Integration test for the parallel-synthesis pipeline
 └── utils/
     ├── logging.py              # Colored and structured logging configuration
@@ -179,7 +179,7 @@ synthesis_agent = Agent(
 
 ---
 
-### 4. Sequential Root Pipeline (`agents/sequantial_agent/agent.py`)
+### 4. Sequential Root Pipeline (`agents/sequential_agent/agent.py`)
 
 A `SequentialAgent` links the parallel fan-out stage with the synthesis fan-in stage:
 
@@ -188,8 +188,8 @@ from google.adk.agents.sequential_agent import SequentialAgent
 from agents.parallel_agent.agent import parallel_agent
 from agents.synthesis_agent.agent import synthesis_agent
 
-sequantial_agent = SequentialAgent(
-    name='sequantial_agent',
+sequential_agent = SequentialAgent(
+    name='sequential_agent',
     sub_agents=[parallel_agent, synthesis_agent],
     description="An agent workflow that finds multiple things in parallel and then synthesizes the results."
 )
@@ -197,15 +197,15 @@ sequantial_agent = SequentialAgent(
 
 ---
 
-### 5. FastAPI Service (`agents/sequantial_agent/main.py`)
+### 5. FastAPI Service (`agents/sequential_agent/main.py`)
 
 Exposes a REST API service using **FastAPI**:
 * `GET /`: Health check endpoint.
-* `POST /run-sequantial-agent`: Accepts `query: str`, initializes an `InMemorySessionService`, and executes the `SequentialAgent` (which first runs `ParallelAgent` across all 3 domain agents, then runs `synthesis_agent` to return the combined result).
+* `POST /run-sequential-agent`: Accepts `query: str`, initializes an `InMemorySessionService`, and executes the `SequentialAgent` (which first runs `ParallelAgent` across all 3 domain agents, then runs `synthesis_agent` to return the combined result).
 
 ---
 
-### 6. Integration Testing (`tests/sequantial_agent/test.py`)
+### 6. Integration Testing (`tests/sequential_agent/test.py`)
 
 The test script validates the end-to-end parallel synthesis flow using FastAPI's `TestClient`:
 * Sends a composite multi-intent travel query:
@@ -220,7 +220,7 @@ The test script validates the end-to-end parallel synthesis flow using FastAPI's
 
 Ensure you have Python 3.10+ installed.
 
-Set up your Gemini API credentials in `agents/sequantial_agent/.env`:
+Set up your Gemini API credentials in `agents/sequential_agent/.env`:
 ```bash
 GEMINI_API_KEY="your-api-key"
 ```
@@ -232,7 +232,7 @@ GEMINI_API_KEY="your-api-key"
 Run the test suite verifying the parallel and synthesis pipeline:
 
 ```bash
-python3 tests/sequantial_agent/test.py
+python3 tests/sequential_agent/test.py
 ```
 
 ---
@@ -242,11 +242,11 @@ python3 tests/sequantial_agent/test.py
 Start the API server:
 
 ```bash
-python3 -m agents.sequantial_agent.main
+python3 -m agents.sequential_agent.main
 ```
 Or with Uvicorn:
 ```bash
-uvicorn agents.sequantial_agent.main:api --host 0.0.0.0 --port 8003 --reload
+uvicorn agents.sequential_agent.main:api --host 0.0.0.0 --port 8003 --reload
 ```
 
 Interactive API documentation:
@@ -258,5 +258,5 @@ Interactive API documentation:
 ### 4. Example API Request
 
 ```bash
-curl -X POST "http://localhost:8003/run-sequantial-agent?query=I%27m%20planning%20a%20trip%20to%20Tokyo%20from%20San%20Francisco.%20Find%20me%20a%20hotel%2C%20sushi%20restaurants%2C%20and%20flight%20options."
+curl -X POST "http://localhost:8003/run-sequential-agent?query=I%27m%20planning%20a%20trip%20to%20Tokyo%20from%20San%20Francisco.%20Find%20me%20a%20hotel%2C%20sushi%20restaurants%2C%20and%20flight%20options."
 ```
