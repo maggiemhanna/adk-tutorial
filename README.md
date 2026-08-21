@@ -22,40 +22,6 @@ Each module in this repository demonstrates a foundational or advanced agentic p
 
 ---
 
-## 🏗️ Multi-Agent Decision Matrix: Choosing the Right Pattern
-
-```
-                                  What is your workflow requirement?
-                                                  │
-         ┌────────────────────────────────────────┼────────────────────────────────────────┐
-         │                                        │                                        │
-         ▼                                        ▼                                        ▼
-   Single Agent                              Multi-Agent                              Multi-Agent
-(Single Turn / Memory)                    (Fixed Pipeline)                        (Dynamic / Adaptive)
-         │                                        │                                        │
-  ┌──────┴──────┐                          ┌──────┴──────┐                          ┌──────┴──────┐
-  ▼             ▼                          ▼             ▼                          ▼             ▼
-1. Memory   2. Schema                6. Sequential   7. Parallel               4. Hierarchy   8. Router
-(Chat /     (Strict                  (Step-by-step   (Concurrent               (In-Memory     (Distributed
-Grounding)   Pydantic)                Pipeline)       Fan-Out/In)               Delegation)    Microservices)
-                                                                                          │
-                                                                                          ▼
-                                                                                     9. Loop Agent
-                                                                                     (Iterative Critique
-                                                                                      & Self-Correction)
-```
-
-| Pattern | Control Flow | Subagent Coordination | State Sharing Mechanism | Recommended Use Cases |
-| :--- | :--- | :--- | :--- | :--- |
-| **Hierarchical** (`Chapter 4`) | Dynamic | LLM autonomously decides which subagents to invoke. | In-memory conversation context. | Open-ended assistants with multiple specialized skills (e.g., travel assistant with hotel, restaurant, and flight subagents). |
-| **Agent as a Tool** (`Chapter 5`) | Functional | Root agent explicitly invokes agents as function tools. | `tool_context.state` dictionary. | Composing complex agent workflows where tools require intermediate state accumulation. |
-| **Sequential** (`Chapter 6`) | Deterministic | Strict linear order (`Agent A` $\rightarrow$ `Agent B`). | Typed schema binding (`output_schema` $\rightarrow$ `input_schema`). | Multi-stage ETL, data transformations, or sequential extraction-to-action pipelines. |
-| **Parallel + Synthesis** (`Chapter 7`) | Concurrent + Linear | Fan-out execution across subagents, then fan-in synthesis. | `output_key` state accumulation $\rightarrow$ prompt context. | Independent multi-domain research, multi-source intelligence gathering, and executive summaries. |
-| **Router Gateway** (`Chapter 8`) | Branching | Intent classification routes to 1 of $N$ microservices. | HTTP / REST API request payloads. | Modular enterprise architectures where domain agents run on separate microservice clusters. |
-| **Loop Agent** (`Chapter 9`) | Iterative Cycle | Cyclic execution (`Critic` $\leftrightarrow$ `Refiner`) with early exit. | Shared state keys + `tool_context.actions.escalate = True`. | Output verification, constraint checking, code generation/linting, and self-improving plans. |
-
----
-
 ## 📂 Repository Structure
 
 ```
@@ -120,7 +86,7 @@ cd 9_loop_agent
 pip install -r requirements.txt
 
 # Run integration tests
-python3 tests/sequantial_agent/test.py
+python3 tests/sequential_agent/test.py
 
 # Start the FastAPI service
 python3 -m agents.sequential_agent.main
